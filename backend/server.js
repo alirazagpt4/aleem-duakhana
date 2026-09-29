@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import sequelize from './config/database.js';
+// import { Admin } from './models/index.js';
 import app from './app/app.js';
+// console.log('Admins count:', await Admin.count());
 
 const PORT = process.env.PORT || 5000;
 

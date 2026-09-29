@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import sequelize from '../config/database.js';
 import { notFound, errorHandler } from '../middleware/errorHandler.js';
+import routes from '../routes/index.js';
 
 const app = express();
 
@@ -31,6 +32,8 @@ app.get('/api/health', async (req, res) => {
         });
     }
 });
+
+app.use('/api', routes);
 
 app.use(notFound);
 app.use(errorHandler);
