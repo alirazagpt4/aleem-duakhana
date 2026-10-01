@@ -5,15 +5,24 @@ import morgan from 'morgan';
 import sequelize from '../config/database.js';
 import { notFound, errorHandler } from '../middleware/errorHandler.js';
 import routes from '../routes/index.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 
 const app = express();
 
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
-
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
 // Logs: development mein short aur rang wala, production mein poori detail
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+
+
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
 
 app.get('/api/health', async (req, res) => {
     try {
