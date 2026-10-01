@@ -12,6 +12,7 @@ const orderLimiter = rateLimit({
     message: { message: 'Too many orders from this connection, try again later' },
 });
 
+
 router.post('/', orderLimiter, orderController.create);   // public
 router.get('/', auth, orderController.getAll);            // admin
 router.get('/:id', auth, orderController.getOne);         // admin
