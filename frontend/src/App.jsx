@@ -1,15 +1,14 @@
-import { useEffect, useState } from 'react';
-import api from './api/axios';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import NotFound from './pages/NotFound';
+import Login from './pages/admin/Login';
 
 export default function App() {
-  const [result, setResult] = useState('checking...');
-
-  useEffect(() => {
-    api
-      .get('/health')
-      .then((res) => setResult(JSON.stringify(res.data)))
-      .catch((err) => setResult('Error: ' + err.message));
-  }, []);
-
-  return <div className="p-6 text-brand-900">{result}</div>;
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/admin/login" element={<Login />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
 }
