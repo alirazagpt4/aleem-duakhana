@@ -12,4 +12,17 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const isLoginCall = error.config?.url === '/auth/login';
+        if (error.response?.status === 401 && !isLoginCall && localStorage.getItem('token')) {
+            localStorage.removeItem('token');
+            window.location.href = '/admin/login';
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default api;
