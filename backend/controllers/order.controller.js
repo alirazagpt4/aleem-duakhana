@@ -103,12 +103,12 @@ export const create = asyncHandler(async (req, res) => {
 
 // Admin
 export const getAll = asyncHandler(async (req, res) => {
-    const { status } = req.query;
+    const { status, search } = req.query;
     if (status && !STATUSES.includes(status)) throw new AppError('Invalid status', 400);
 
     const page = req.query.page ? getId(req.query.page) : 1;
     const limit = 20;
-    res.json(await orderService.getAll({ status, page, limit }));
+    res.json(await orderService.getAll({ status, search, page, limit }));
 });
 
 export const getOne = asyncHandler(async (req, res) => {

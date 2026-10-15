@@ -1,6 +1,7 @@
 import { sequelize, Order, OrderItem, Product } from '../models/index.js';
 import AppError from '../utils/AppError.js';
 import generateOrderNumber from '../utils/orderNumber.js';
+import { Op } from 'sequelize';
 
 const withItems = [{ model: OrderItem, as: 'items' }];
 
@@ -64,8 +65,18 @@ export const create = async ({ customer, items }) => {
     return findOrFail(orderId);
 };
 
-export const getAll = async ({ status, page, limit }) => {
-    const where = status ? { status } : {};
+export const getAll = async ({ status, search, page, limit }) => {
+    const where = {};
+    if (status) where.status = status;
+
+    if (search) {
+        where[Op.or] = [
+            { order_number: { [Op.like]: `%${search}%` } },
+            { customer_name: { [Op.like]: `%${search}%` } },
+            { customer_phone: { [Op.like]: `%${search}%` } },
+        ];
+    }
+
     const { rows, count } = await Order.findAndCountAll({
         where,
         order: [['created_at', 'DESC'], ['id', 'DESC']],
