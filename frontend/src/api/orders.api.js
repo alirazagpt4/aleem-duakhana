@@ -8,3 +8,7 @@ export const getOrderById = (id) =>
 
 export const updateOrder = ({ id, data }) =>
     api.patch(`/orders/${id}`, data).then((res) => res.data);
+
+// customer create order
+export const createOrder = (payload) =>
+    api.post('/orders', payload).then((res) => res.data);

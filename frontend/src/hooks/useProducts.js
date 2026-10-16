@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import {
     getAdminProducts,
+    getProducts,
+    getProduct,
     createProduct,
     updateProduct,
     deleteProduct,
@@ -9,6 +11,19 @@ import {
 
 export const useAdminProducts = () =>
     useQuery({ queryKey: ['products', 'admin'], queryFn: getAdminProducts });
+
+export const useProducts = (categoryId) =>
+    useQuery({
+        queryKey: ['products', 'list', categoryId ?? 'all'],
+        queryFn: () => getProducts(categoryId),
+    });
+
+export const useProduct = (id) =>
+    useQuery({
+        queryKey: ['products', 'detail', id],
+        queryFn: () => getProduct(id),
+        enabled: Boolean(id),
+    });
 
 const errorMessage = (err) => err.response?.data?.message || 'Something went wrong';
 

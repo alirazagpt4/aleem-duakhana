@@ -1,3 +1,11 @@
+import Hero from '../components/home/Hero';
+import TrustStrip from '../components/home/TrustStrip';
+
 export default function Home() {
-    return <div className="p-6 text-brand-900">Home page</div>;
+    return (
+        <>
+            <Hero />
+            <TrustStrip />
+        </>
+    );
 }
