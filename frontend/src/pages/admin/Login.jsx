@@ -1,28 +1,28 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../../components/ui/Button';
 
 export default function Login() {
-    const { login } = useAuth();
-    const navigate = useNavigate();
+    const { admin, loading: authLoading, login } = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+
+    if (authLoading) return null;
+    if (admin) return <Navigate to="/admin/orders" replace />;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        setLoading(true);
+        setSubmitting(true);
 
         try {
-            await login(username, password);
-            navigate('/admin/orders', { replace: true });
+            await login(username.trim(), password);
         } catch (err) {
             setError(err.response?.data?.message || 'Invalid username or password');
-        } finally {
-            setLoading(false);
+            setSubmitting(false);
         }
     };
 
@@ -48,6 +48,7 @@ export default function Login() {
                             required
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            autoComplete="username"
                             className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-ink outline-none focus:ring-2 focus:ring-brand-500"
                             placeholder="Enter your username"
                         />
@@ -60,12 +61,13 @@ export default function Login() {
                             required
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            autoComplete="current-password"
                             className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-ink outline-none focus:ring-2 focus:ring-brand-500"
                             placeholder="••••••••"
                         />
                     </div>
 
-                    <Button type="submit" loading={loading} className="w-full justify-center py-2.5">
+                    <Button type="submit" loading={submitting} className="w-full justify-center py-2.5">
                         Sign In
                     </Button>
                 </form>
